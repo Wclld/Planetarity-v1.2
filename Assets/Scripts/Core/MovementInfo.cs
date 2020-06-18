@@ -4,11 +4,11 @@ using UnityEngine;
 [Serializable]
 internal class MovementInfo
 {
-	public Vector3 CenterPos => _center? _center.position : Vector3.zero;
-	public float StartProgress=> _startCycleProgress;
-	public float CycleTime => _cycleTime;
-	public float XRange => _xRange;
-	public float YRange => _yRange;
+	internal Vector3 CenterPos => _center? _center.position : Vector3.zero;
+	internal float StartProgress=> _startCycleProgress;
+	internal float CycleTime => _cycleTime;
+	internal float XRange => _xRange;
+	internal float YRange => _yRange;
 
 	[SerializeField] Transform _center = default;
 	[Range(0,1)]
