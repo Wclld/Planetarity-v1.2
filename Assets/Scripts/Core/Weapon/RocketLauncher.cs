@@ -44,7 +44,6 @@ internal sealed class RocketLauncher : IWeapon
 	public void SetDirection ( Vector2 targetPosition )
 	{
 		_aimDirection = ( targetPosition - ( Vector2 )_homePlanet.position ).normalized;
-		Debug.DrawRay( _homePlanet.position, _aimDirection, Color.cyan, 5 );
 	}
 
 
