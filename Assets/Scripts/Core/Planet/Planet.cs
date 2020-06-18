@@ -3,12 +3,19 @@ using UnityEngine;
 
 internal sealed class Planet : MonoBehaviour, IDamagable
 {
+
+	public event Action<Planet> OnDeath = default;
+	public event Action<int> OnHealthChange = default;
+
+	[SerializeField] int _maxHealth = 10;
 	[SerializeField] MovementInfo _movementInfo = default;
 	//TEMP!
 	[SerializeField] GameObject _rocketPrefab = default;
 
 	private IMovement _movement;
 	private IWeapon _weapon;
+
+	private int _currentHealth;
 
 	private Vector3 _nextFramePosition;
 	//TEMP!
@@ -17,6 +24,12 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 
 	private void Awake ( )
 	{
+		OnHealthChange += x => Debug.Log( $"hp left:{x}", gameObject );
+		OnDeath += x =>
+		{
+			Debug.Log( $"hp left:{x}", gameObject );
+			Destroy( gameObject );
+		};
 		InitMovement( MovementType.Eliptical );
 		ChangeWeapon( new RocketLauncher( ) );
 	}
@@ -24,8 +37,14 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 	private void Start ( )
 	{
 		//TEMP!
-		if( _canShoot )
+		_currentHealth = _maxHealth;
+		OnHealthChange += CheckDeath;
+		if ( _canShoot )
+		{
+			
 			InputManager.SubscribeToInput( _weapon.Fire, _weapon.SetDirection );
+		}
+		//tempEnd
 	}
 
 	private void OnValidate ( )
@@ -44,13 +63,25 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 		_nextFramePosition = _movement.UpdatePosition( Time.fixedDeltaTime );
 	}
 
-	public void DealDamage ( float damage )
+	public void Init ( MovementInfo info )
 	{
-		Debug.Log( $"Damage dealed: {damage}" );
+		//_currentHealth = _maxHealth;
+		//OnHealthChange += CheckDeath;
+		_movementInfo = info;
+	}
+
+	public void DealDamage ( int damage )
+	{
+		if ( damage != 0 )
+		{
+			_currentHealth -= damage;
+			_currentHealth = Mathf.Clamp( _currentHealth, 0, _maxHealth );
+			OnHealthChange?.Invoke( _currentHealth );
+		}
 	}
 
 
-	internal void InitMovement ( MovementType type )
+	private void InitMovement ( MovementType type )
 	{
 		switch ( type )
 		{
@@ -67,7 +98,7 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 		}
 	}
 
-	internal void ChangeWeapon ( IWeapon weapon )
+	private void ChangeWeapon ( IWeapon weapon )
 	{
 		//TEMP
 		if ( _canShoot )
@@ -79,4 +110,11 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 		}
 	}
 
+	private void CheckDeath ( int health )
+	{
+		if ( health <= 0 )
+		{
+			OnDeath?.Invoke( this );
+		}
+	}
 }

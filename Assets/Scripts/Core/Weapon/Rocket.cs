@@ -28,7 +28,7 @@ public class Rocket : MonoBehaviour
 
 	private void TryDealDamage ( Collider other )
 	{
-		var damagable = other.gameObject.GetComponent<IDamagable>();
+		var damagable = other.GetComponentInParent<IDamagable>();
 		if ( damagable != null )
 		{
 			damagable.DealDamage( _info.Damage );

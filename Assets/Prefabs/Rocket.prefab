@@ -111,7 +111,7 @@ MonoBehaviour:
     _acceleration: 100
     _startAccelerationDuration: 2
     _weight: 15
-    _damage: 0
+    _damage: 3
     _cooldown: 0
 --- !u!54 &6042677087219013719
 Rigidbody:

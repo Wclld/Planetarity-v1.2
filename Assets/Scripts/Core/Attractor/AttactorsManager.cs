@@ -24,20 +24,23 @@ internal static class AttractorsManager
 			Debug.LogError( "[AttractorsManager.RemoveAttractor]: Attractor is not on the list!" );
 		}
 	}
-	
+
 	public static Vector3 CalculateForceVectorForTarget ( Vector3 position, float mass )
 	{
 		var attractionSum = Vector3.zero;
 
 		for ( int i = 0; i < _attractors.Count; i++ )
 		{
-			var direction = (_attractors[i].CenterOfMass - position);
-			var sqrDistance = direction.sqrMagnitude;
-			var massMulti = mass * _attractors[i].Mass;
-			var resNoG =  massMulti / sqrDistance ;
-			var attractionForce = G * resNoG;
+			if ( _attractors[i] != null )
+			{
+				var direction = (_attractors[i].CenterOfMass - position);
+				var sqrDistance = direction.sqrMagnitude;
+				var massMulti = mass * _attractors[i].Mass;
+				var resNoG =  massMulti / sqrDistance ;
+				var attractionForce = G * resNoG;
 
-			attractionSum += direction * attractionForce;
+				attractionSum += direction * attractionForce;
+			}
 		}
 
 		return attractionSum / _attractors.Count;

@@ -18,4 +18,13 @@ internal class MovementInfo
 	[SerializeField] float _xRange = 1;
 	[SerializeField] float _yRange = 1;
 
+	public MovementInfo ( Transform center, Vector2 circulationRange, float cycleTime, float startProgress )
+	{
+		_center = center;
+		_xRange = circulationRange.x;
+		_yRange = circulationRange.y;
+		_cycleTime = cycleTime;
+		_startCycleProgress = startProgress;
+	}
+
 }
