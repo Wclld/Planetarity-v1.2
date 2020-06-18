@@ -1,16 +1,18 @@
 ﻿using System;
 using UnityEngine;
 
-internal sealed class Planet : MonoBehaviour
+internal sealed class Planet : MonoBehaviour, IDamagable
 {
-	[SerializeField] MovementInfo _movementInfo;
+	[SerializeField] MovementInfo _movementInfo = default;
 	//TEMP!
-	[SerializeField] GameObject _rocketPrefab;
+	[SerializeField] GameObject _rocketPrefab = default;
 
 	private IMovement _movement;
 	private IWeapon _weapon;
 
 	private Vector3 _nextFramePosition;
+	//TEMP!
+	[SerializeField] bool _canShoot = default;
 
 
 	private void Awake ( )
@@ -21,7 +23,9 @@ internal sealed class Planet : MonoBehaviour
 
 	private void Start ( )
 	{
-		InputManager.SubscribeToInput(_weapon.Fire, _weapon.SetDirection );
+		//TEMP!
+		if( _canShoot )
+			InputManager.SubscribeToInput( _weapon.Fire, _weapon.SetDirection );
 	}
 
 	private void OnValidate ( )
@@ -40,6 +44,11 @@ internal sealed class Planet : MonoBehaviour
 		_nextFramePosition = _movement.UpdatePosition( Time.fixedDeltaTime );
 	}
 
+	public void DealDamage ( float damage )
+	{
+		Debug.Log( $"Damage dealed: {damage}" );
+	}
+
 
 	internal void InitMovement ( MovementType type )
 	{
@@ -47,22 +56,27 @@ internal sealed class Planet : MonoBehaviour
 		{
 			case MovementType.Circular:
 				throw new NotImplementedException( );
-				break;
+				//break;
 			case MovementType.Eliptical:
 				_movement = new ElipticalMovement( );
 				_movement.Init( _movementInfo );
 				break;
 			default:
 				throw new NotImplementedException( );
-				break;
+				//break;
 		}
 	}
 
 	internal void ChangeWeapon ( IWeapon weapon )
 	{
-		_weapon = weapon;
-		_weapon.Init( transform );
-		//TEMP!
-		_weapon.SetPrefab( _rocketPrefab );
+		//TEMP
+		if ( _canShoot )
+		{
+			_weapon = weapon;
+			_weapon.Init( transform );
+			//TEMP!
+			_weapon.SetPrefab( _rocketPrefab );
+		}
 	}
+
 }

@@ -7,7 +7,7 @@ internal class Attractor: MonoBehaviour
 	public Vector3 CenterOfMass => transform.position;
 	
 
-	[SerializeField] private float _mass;
+	[SerializeField] private float _mass = default;
 
 
 	private void Awake ( )

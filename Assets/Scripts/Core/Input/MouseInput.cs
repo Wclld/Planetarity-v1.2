@@ -10,8 +10,6 @@ internal class MouseInput : MonoBehaviour, IInput
 
 	private Camera _camera = default;
 
-	private Vector3 _previousPosition = default;
-
 	private void Awake ( )
 	{
 		_camera = Camera.main;
@@ -32,11 +30,7 @@ internal class MouseInput : MonoBehaviour, IInput
 		var worldPosition = _camera.ScreenToWorldPoint( mousePos );
 		worldPosition.z = _planetes.position.z;
 
-		if ( _previousPosition != worldPosition )
-		{
-			_previousPosition = worldPosition;
-			OnPositionChanged?.Invoke( worldPosition );
-		}
+		OnPositionChanged?.Invoke( worldPosition );
 	}
 
 	private void DetectFireInput ( )
@@ -45,11 +39,5 @@ internal class MouseInput : MonoBehaviour, IInput
 		{
 			OnFirePressed?.Invoke( );
 		}
-	}
-
-	private void OnDrawGizmos ( )
-	{
-		Gizmos.color = Color.green;
-		Gizmos.DrawSphere( _previousPosition, .2f );
 	}
 }

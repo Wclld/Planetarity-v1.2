@@ -40,6 +40,6 @@ internal static class AttractorsManager
 			attractionSum += direction * attractionForce;
 		}
 
-		return attractionSum;
+		return attractionSum / _attractors.Count;
 	}
 }
