@@ -10,8 +10,8 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 	public int MaxHealth => _maxHealth;
 
 	[SerializeField] int _maxHealth = 10;
-	[SerializeField] HealthBar _healthBar;
-	[SerializeField] Cooldown _cooldownHUD;
+	[SerializeField] HealthBar _healthBar = default;
+	[SerializeField] Cooldown _cooldownHUD = default;
 
 	private IMovement _movement;
 	private IWeapon _weapon;
@@ -24,11 +24,8 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 
 	private void Awake ( )
 	{
+		OnDeath += RemoveInput;
 
-		OnDeath += x =>
-		{
-			Destroy( gameObject );
-		};
 		ChangeWeapon( new RocketLauncher( ) );
 	}
 
@@ -66,17 +63,16 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 		}
 	}
 
-	internal void SetPlayerHUD ( PlayerHUD hud)
+	public void Die ( )
 	{
-		
+		OnDeath?.Invoke( this );
+		Destroy( gameObject );
 	}
+
 	internal void SetInput ( IInput input )
 	{
 		_input = input;
 		_input.SubscribeWeapon( _weapon );
-		OnDeath += x => _input.UnsubscribeWeapon( _weapon );
-		
-		
 	}
 
 	internal void InitMovement ( MovementInfo info )
@@ -84,7 +80,6 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 		_movement = new ElipticalMovement( );
 		_movement.Init( info );
 	}
-
 
 	private void ChangeWeapon ( IWeapon weapon )
 	{
@@ -99,7 +94,16 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 	{
 		if ( health <= 0 )
 		{
-			OnDeath?.Invoke( this );
+			Die( );
+		}
+	}
+
+	private void RemoveInput ( Planet planet )
+	{
+		if ( _input != null )
+		{
+			_input.UnsubscribeWeapon( _weapon );
+			_input.SelfDestroy( );
 		}
 	}
 }

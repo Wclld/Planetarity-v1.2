@@ -22,6 +22,10 @@ internal sealed class PlanetFabric : MonoBehaviour
 		return planet;
 	}
 
+	internal void ResetMovementInfo ( )
+	{
+		_lastInfo = null;
+	}
 	private MovementInfo CalculateNewMovement ( )
 	{
 		var newRadius = RandomRadius( );

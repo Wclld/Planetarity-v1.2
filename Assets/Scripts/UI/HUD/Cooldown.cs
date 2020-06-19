@@ -3,8 +3,8 @@ using UnityEngine.UI;
 
 public class Cooldown : MonoBehaviour
 {
-	[SerializeField] Image _cooldownImg;
-	[SerializeField] Image _rocketImg;
+	[SerializeField] Image _cooldownImg = default;
+	[SerializeField] Image _rocketImg = default;
 
 	public void UpdateCooldown ( float timeLeftPercent )
 	{

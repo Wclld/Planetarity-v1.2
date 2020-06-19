@@ -26,6 +26,11 @@ internal class MouseInput : MonoBehaviour, IInput
 		_target = target;
 	}
 
+	public void SelfDestroy ( )
+	{
+		Destroy( gameObject );
+	}
+
 	private void DetectPositionChange ( )
 	{
 		var mousePos = Input.mousePosition;

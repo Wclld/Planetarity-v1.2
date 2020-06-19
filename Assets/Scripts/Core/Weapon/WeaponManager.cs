@@ -44,6 +44,14 @@ public class WeaponManager : MonoBehaviour
 		}
 	}
 
+	public void Clear ( )
+	{
+		while ( _rockets.Count > 0 )
+		{
+			_rockets[0].DestroyFlow( );
+		}
+	}
+
 	public void InitWeapon ( GameObject prefab, Transform planetOwner, Vector3 direction )
 	{
 		var weapon = Instantiate( prefab, planetOwner.position, Quaternion.LookRotation( direction ), transform );

@@ -8,6 +8,14 @@ public class Rocket : MonoBehaviour
 	[SerializeField] WeaponInfo _info = default;
 	private bool _launchTriggerLeaved = false;
 
+
+	public void DestroyFlow ( )
+	{
+		WeaponManager.Instance.RemoveRocket( this );
+		Destroy( gameObject );
+	}
+
+
 	private void OnTriggerEnter ( Collider other )
 	{
 		if ( _launchTriggerLeaved )
@@ -32,9 +40,4 @@ public class Rocket : MonoBehaviour
 		}
 	}
 
-	private void DestroyFlow ( )
-	{
-		WeaponManager.Instance.RemoveRocket( this );
-		Destroy( gameObject );
-	}
 }

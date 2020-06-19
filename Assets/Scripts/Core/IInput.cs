@@ -7,4 +7,5 @@ internal interface IInput
 	event Action OnFirePressed;
 	void SubscribeWeapon ( IWeapon weapon );
 	void UnsubscribeWeapon ( IWeapon weapon );
+	void SelfDestroy ( );
 }

@@ -33,8 +33,7 @@ internal class EnemyAIInput : MonoBehaviour, IInput
 		weapon.OnCooldownFinished -= Aim;
 		weapon.OnCooldownFinished -= Shoot;
 	}
-	public void SubscribeWeapon (
- IWeapon weapon )
+	public void SubscribeWeapon ( IWeapon weapon )
 	{
 		OnFirePressed += weapon.Fire;
 		OnPositionChanged += weapon.SetDirection;
@@ -43,6 +42,11 @@ internal class EnemyAIInput : MonoBehaviour, IInput
 		weapon.OnCooldownFinished += Shoot;
 
 		_planetOwner = weapon.Owner;
+	}
+
+	public void SelfDestroy ( )
+	{
+		Destroy( gameObject );
 	}
 
 	private void Aim ( )

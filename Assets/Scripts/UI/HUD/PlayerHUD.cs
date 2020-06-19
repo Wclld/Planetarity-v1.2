@@ -3,9 +3,9 @@
 [RequireComponent( typeof ( CanvasGroup ) )]
 internal sealed class PlayerHUD : MonoBehaviour
 {
-	[SerializeField] Cooldown _cooldown;
-	[SerializeField] HealthBar _healthBar;
-	private CanvasGroup _canvas;
+	[SerializeField] Cooldown _cooldown = default;
+	[SerializeField] HealthBar _healthBar = default;
+	private CanvasGroup _canvas = default;
 
 
 	private void Awake ( )

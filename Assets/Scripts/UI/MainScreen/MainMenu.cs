@@ -16,6 +16,9 @@ internal sealed class MainMenu : MonoBehaviour
 		{
 			Destroy( gameObject );
 		}
+
+		_gameManager.OnWin += ShowMenuCanvas;
+		_gameManager.OnLoose += ShowMenuCanvas;
 	}
 
 	public void StartGame ( )
@@ -35,5 +38,12 @@ internal sealed class MainMenu : MonoBehaviour
 		_canvasGroup.alpha = 0;
 		_canvasGroup.blocksRaycasts = false;
 		_canvasGroup.interactable = false;
+	}
+
+	private void ShowMenuCanvas ( )
+	{
+		_canvasGroup.alpha = 1;
+		_canvasGroup.blocksRaycasts = true;
+		_canvasGroup.interactable = true;
 	}
 }
