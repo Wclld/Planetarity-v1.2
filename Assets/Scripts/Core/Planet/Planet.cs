@@ -8,8 +8,6 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 	public event Action<int> OnHealthChange = default;
 
 	[SerializeField] int _maxHealth = 10;
-	//TEMP!
-	[SerializeField] GameObject _rocketPrefab = default;
 
 	private IMovement _movement;
 	private IWeapon _weapon;
@@ -79,8 +77,9 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 	{
 		_weapon = weapon;
 		_weapon.Init( transform );
-		//TEMP!
-		_weapon.SetPrefab( _rocketPrefab );
+
+		var prefab = WeaponManager.Instance.GetRandomWeapon( );
+		_weapon.SetPrefab( prefab );
 	}
 
 	private void CheckDeath ( int health )

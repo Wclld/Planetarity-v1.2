@@ -9,6 +9,7 @@ public class WeaponManager : MonoBehaviour
 		get; private set;
 	}
 
+	[SerializeField] List<GameObject> _rocketVariants;
 
 	private List<Rigidbody> _weaponsRigs = new List<Rigidbody>();
 	private List<Rocket> _rockets = new List<Rocket>();
@@ -51,6 +52,12 @@ public class WeaponManager : MonoBehaviour
 		var weaponInfo = weapon.GetComponent<Rocket>();
 		_rockets.Add( weaponInfo );
 		StartCoroutine( WaitForStartAccelerationFinished( weaponInfo.Info ) );
+	}
+	
+	public GameObject GetRandomWeapon ( )
+	{
+		var index = Random.Range(0, _rocketVariants.Count);
+		return _rocketVariants[index];
 	}
 
 	public void RemoveRocket ( Rocket rocket )
