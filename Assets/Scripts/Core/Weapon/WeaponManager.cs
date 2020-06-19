@@ -9,7 +9,7 @@ public class WeaponManager : MonoBehaviour
 		get; private set;
 	}
 
-	[SerializeField] List<GameObject> _rocketVariants;
+	[SerializeField] List<GameObject> _rocketVariants = new List<GameObject>( );
 
 	private List<Rigidbody> _weaponsRigs = new List<Rigidbody>();
 	private List<Rocket> _rockets = new List<Rocket>();

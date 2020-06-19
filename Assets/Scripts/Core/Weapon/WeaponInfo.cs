@@ -13,11 +13,11 @@ public class WeaponInfo
 	public void TurnOffStartAcceleration ( ) => _isStartAccelerationFinished = true;
 	
 
-	[SerializeField] float _acceleration;
-	[SerializeField] float _startAccelerationDuration;
-	[SerializeField] float _weight;
-	[SerializeField] int _damage;
-	[SerializeField] float _cooldown;
+	[SerializeField] float _acceleration = default;
+	[SerializeField] float _startAccelerationDuration = default;
+	[SerializeField] float _weight = default;
+	[SerializeField] int _damage = default;
+	[SerializeField] float _cooldown = default;
 
 	private bool _isStartAccelerationFinished = false;
 }

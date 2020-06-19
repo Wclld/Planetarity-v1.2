@@ -9,7 +9,7 @@ internal interface IWeapon
 	Transform Owner{ get; }
 	void Init ( Transform homePlanet, float remainingCooldown = 0 );
 	void SetDirection ( Vector2 targetPosition );
-	void UpdateCooldown ( float time );
+	float UpdateCooldown ( float time );
 	void Fire ( );
 
 	//Temp!

@@ -10,7 +10,6 @@ public class Rocket : MonoBehaviour
 
 	private void OnTriggerEnter ( Collider other )
 	{
-		Debug.Log( "Trigger entered", other.gameObject );
 		if ( _launchTriggerLeaved )
 		{
 			TryDealDamage( other );
@@ -21,8 +20,6 @@ public class Rocket : MonoBehaviour
 
 	private void OnTriggerExit ( Collider other )
 	{
-		Debug.Log( "Trigger exited", other.gameObject );
-
 		_launchTriggerLeaved = true;
 	}
 

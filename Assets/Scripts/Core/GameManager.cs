@@ -5,6 +5,7 @@ internal sealed class GameManager : MonoBehaviour
 {
 	public List<Planet> Planets => _planets;
 
+	[SerializeField] PlayerHUD _playerHUD;
 	[SerializeField] InputElements _inputElements = default;
 	[SerializeField] PlanetFabric _planetFabric = default;
 	[Range(1,4)]
@@ -12,7 +13,7 @@ internal sealed class GameManager : MonoBehaviour
 
 	private List<Planet> _planets = new List<Planet>( );
 
-	private void Start ( )
+	public void InitGame ( )
 	{
 		var playerIndex = Random.Range(0, _enemyCount - 1 );
 		CreatePlanetes( _enemyCount + 1, playerIndex );
@@ -31,6 +32,7 @@ internal sealed class GameManager : MonoBehaviour
 				var input = _inputElements.GetNewInput( InputType.Mouse );
 				( ( MouseInput )input ).SetTargetTransform( _planetFabric.transform );
 				newPlanet.SetInput( input );
+				_playerHUD.SubscribePlayer( newPlanet );
 			}
 			else
 			{

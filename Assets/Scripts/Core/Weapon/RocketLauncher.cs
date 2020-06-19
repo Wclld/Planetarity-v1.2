@@ -53,7 +53,7 @@ internal sealed class RocketLauncher : IWeapon
 		_aimDirection = ( targetPosition - ( Vector2 )_homePlanet.position ).normalized;
 	}
 
-	public void UpdateCooldown ( float time )
+	public float UpdateCooldown ( float time )
 	{
 		_currentCooldown -= time;
 		if ( _currentCooldown <= 0 )
@@ -61,5 +61,7 @@ internal sealed class RocketLauncher : IWeapon
 			OnCooldownFinished?.Invoke( );
 		}
 		_currentCooldown = Mathf.Clamp( _currentCooldown, 0, _maxCooldown );
+
+		return _currentCooldown / _maxCooldown;
 	}
 }
