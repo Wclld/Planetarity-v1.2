@@ -7,11 +7,13 @@ internal sealed class ElipticalMovement : IMovement
 	private float _rotationSpeed;
 	private Vector2 _defaultOffset;
 
-	public void Init ( MovementInfo info )
+	public float CurrentProgress => _currentProgress;
+
+	public void Init ( MovementInfo info)
 	{
 		_info = info;
 
-		_currentProgress = info.StartProgress;
+		_currentProgress = info.CurrentProgress;
 		_rotationSpeed = 1 / info.CycleTime;
 		_defaultOffset = info.CenterPos;
 	}

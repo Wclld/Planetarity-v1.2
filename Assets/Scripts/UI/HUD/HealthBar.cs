@@ -16,10 +16,14 @@ public class HealthBar : MonoBehaviour
 		}
 	}
 
-	public void Init ( int maxHealth )
+	public void Init ( int maxHealth, int currenthealth = -1 )
 	{
+		if ( currenthealth < 0 )
+		{
+			currenthealth = maxHealth;
+		}
 		_maxHealth = maxHealth;
-		ChangeHealth( maxHealth );
+		ChangeHealth( currenthealth );
 	}
 
 	public void ChangeHealth ( int health )

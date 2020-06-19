@@ -17,7 +17,10 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 	private IWeapon _weapon;
 	private IInput _input;
 
-	private int _currentHealth;
+	private MovementInfo _movementInfo = default;
+
+	private int _currentHealth = 0;
+	private int _weaponIndex;
 
 	private Vector3 _nextFramePosition;
 
@@ -26,15 +29,14 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 	{
 		OnDeath += RemoveInput;
 
-		ChangeWeapon( new RocketLauncher( ) );
 	}
 
 	private void Start ( )
 	{
-		_currentHealth = _maxHealth;
-		_healthBar.Init( _maxHealth );
-		OnHealthChange += CheckDeath;
-		OnHealthChange += _healthBar.ChangeHealth;
+		if ( _currentHealth == 0 )
+		{
+			InitHealth( _maxHealth );
+		}
 
 		OnUpdateCooldown += _cooldownHUD.UpdateCooldown;
 	}
@@ -79,15 +81,43 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 	{
 		_movement = new ElipticalMovement( );
 		_movement.Init( info );
+		_movementInfo = info;
 	}
 
-	private void ChangeWeapon ( IWeapon weapon )
+	internal void InitHealth ( int health )
+	{
+		_currentHealth = health;
+		_healthBar.Init( _maxHealth, health );
+		OnHealthChange += CheckDeath;
+		OnHealthChange += _healthBar.ChangeHealth;
+	}
+
+	internal PlanetInfo GetPlanetInfo ( )
+	{
+		var inputType = _input is MouseInput ? InputType.Mouse : InputType.AIEnemy;
+
+		_movementInfo.SetProgress(_movement.CurrentProgress);
+		var info = new PlanetInfo( )
+		{
+			HealthPoints = _currentHealth,
+			MovementInfo = _movementInfo,
+			WeaponIndex = _weaponIndex,
+			InputType = inputType,
+			MovementType = MovementType.Eliptical
+
+		};
+		return info;
+	}
+
+	internal void ChangeWeapon ( IWeapon weapon, int weaponIndex = -1 )
 	{
 		_weapon = weapon;
 		_weapon.Init( transform );
 
-		var prefab = WeaponManager.Instance.GetRandomWeapon( );
-		_weapon.SetPrefab( prefab );
+		_weaponIndex = weaponIndex < 0 ? WeaponManager.Instance.GetRandomWeaponIndex( ) : weaponIndex;
+
+		_weapon.SetWeaponIndex( _weaponIndex );
+
 	}
 
 	private void CheckDeath ( int health )

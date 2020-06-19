@@ -22,10 +22,20 @@ internal sealed class PlanetFabric : MonoBehaviour
 		return planet;
 	}
 
+	internal Planet CreatePlanet ( MovementInfo info )
+	{
+		var planet = Instantiate( _planetPrefab, transform ).GetComponent<Planet>( );
+		planet.InitMovement( info );
+		return planet;
+	}
+
 	internal void ResetMovementInfo ( )
 	{
 		_lastInfo = null;
 	}
+
+
+
 	private MovementInfo CalculateNewMovement ( )
 	{
 		var newRadius = RandomRadius( );

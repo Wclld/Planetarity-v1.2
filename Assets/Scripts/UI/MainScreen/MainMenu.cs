@@ -1,16 +1,19 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 internal sealed class MainMenu : MonoBehaviour
 {
+	[SerializeField] Button _loadButton = default;
 	private GameManager _gameManager;
 	private CanvasGroup _canvasGroup;
-
+	private Saver _saver;
 
 	private void Awake ( )
 	{
 		_canvasGroup = GetComponent<CanvasGroup>( );
 		_gameManager = FindObjectOfType<GameManager>( );
+		_saver = FindObjectOfType<Saver>( );
 
 		if ( _gameManager == null )
 		{
@@ -19,6 +22,8 @@ internal sealed class MainMenu : MonoBehaviour
 
 		_gameManager.OnWin += ShowMenuCanvas;
 		_gameManager.OnLoose += ShowMenuCanvas;
+
+		ShowMenuCanvas( );
 	}
 
 	public void StartGame ( )
@@ -30,6 +35,7 @@ internal sealed class MainMenu : MonoBehaviour
 	public void LoadSavedGame ( )
 	{
 		HideMenuCanvas( );
+		_gameManager.LoadFromSave( );
 	}
 
 
@@ -42,6 +48,8 @@ internal sealed class MainMenu : MonoBehaviour
 
 	private void ShowMenuCanvas ( )
 	{
+		_loadButton.interactable = _saver.HaveSave;
+
 		_canvasGroup.alpha = 1;
 		_canvasGroup.blocksRaycasts = true;
 		_canvasGroup.interactable = true;

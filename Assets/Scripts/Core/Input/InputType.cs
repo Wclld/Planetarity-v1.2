@@ -1,4 +1,4 @@
-﻿internal enum InputType
+﻿public enum InputType
 {
 	Mouse = 0,
 	AIEnemy

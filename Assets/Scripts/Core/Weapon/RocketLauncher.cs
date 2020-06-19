@@ -6,7 +6,7 @@ internal sealed class RocketLauncher : IWeapon
 	public event Action OnCooldown = default;
 	public event Action OnCooldownFinished = default;
 
-	[SerializeField] GameObject _rocketPrefab;
+	private int _rocketPrefabIndex;
 
 	private Transform _homePlanet = default;
 	private Vector3 _aimDirection = default;
@@ -21,11 +21,11 @@ internal sealed class RocketLauncher : IWeapon
 		_homePlanet = homePlanet;
 	}
 
-	public void SetPrefab ( GameObject prefab )
+	public void SetWeaponIndex ( int index )
 	{
-		_rocketPrefab = prefab;
+		_rocketPrefabIndex = index;
 
-		_maxCooldown = _rocketPrefab.GetComponent<Rocket>( ).Info.Cooldown;
+		_maxCooldown = WeaponManager.Instance.GetPrefabWeaponInfoByIndex( index ).Cooldown;
 		_currentCooldown = _maxCooldown;
 	}
 
@@ -43,7 +43,7 @@ internal sealed class RocketLauncher : IWeapon
 
 	private void LaunchRocket ( )
 	{
-		WeaponManager.Instance.InitWeapon( _rocketPrefab, _homePlanet, _aimDirection );
+		WeaponManager.Instance.InitWeapon( _rocketPrefabIndex, _homePlanet.position, _aimDirection );
 		_currentCooldown = _maxCooldown;
 
 	}

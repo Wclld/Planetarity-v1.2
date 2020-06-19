@@ -8,6 +8,8 @@ public class Rocket : MonoBehaviour
 	[SerializeField] WeaponInfo _info = default;
 	private bool _launchTriggerLeaved = false;
 
+	private int _prefabIndex;
+
 
 	public void DestroyFlow ( )
 	{
@@ -15,6 +17,22 @@ public class Rocket : MonoBehaviour
 		Destroy( gameObject );
 	}
 
+	public void SetWeaponPrefabIndex ( int index )
+	{
+		_prefabIndex = index;
+	}
+
+	internal RocketInfo GetInfo ( )
+	{
+		var info = new RocketInfo()
+		{
+			Position = transform.position,
+			Rotation = transform.rotation.eulerAngles,
+			Velocity =  GetComponent<Rigidbody>().velocity,
+			WeaponInfoIndex = _prefabIndex
+		};
+		return info;
+	}
 
 	private void OnTriggerEnter ( Collider other )
 	{

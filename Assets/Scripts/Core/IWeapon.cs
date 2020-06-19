@@ -13,5 +13,5 @@ internal interface IWeapon
 	void Fire ( );
 
 	//Temp!
-	void SetPrefab ( GameObject prefab );
+	void SetWeaponIndex ( int index );
 }

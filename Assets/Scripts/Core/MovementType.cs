@@ -1,5 +1,4 @@
-﻿internal enum MovementType
+﻿public enum MovementType
 {
-	Circular,
 	Eliptical,
 }

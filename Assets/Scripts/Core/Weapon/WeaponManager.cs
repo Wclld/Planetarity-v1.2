@@ -24,8 +24,6 @@ public class WeaponManager : MonoBehaviour
 
 	private void Start ( )
 	{
-		//TODO:
-		//Subscribe to Attractor Initialisation
 	}
 
 	private void Update ( )
@@ -33,14 +31,8 @@ public class WeaponManager : MonoBehaviour
 		for ( int i = 0; i < _weaponsRigs.Count; i++ )
 		{
 			var forceVector = CalculateAcceleration( _weaponsRigs[i], _rockets[i].Info );
-			try
-			{
-				_weaponsRigs[i].AddForce( forceVector, ForceMode.Acceleration );
-			}
-			catch
-			{
-				Debug.LogError( "Here" );
-			}
+			
+			_weaponsRigs[i].AddForce( forceVector, ForceMode.Acceleration );
 		}
 	}
 
@@ -52,20 +44,44 @@ public class WeaponManager : MonoBehaviour
 		}
 	}
 
-	public void InitWeapon ( GameObject prefab, Transform planetOwner, Vector3 direction )
+	public void SetRocketsFromSave ( List<RocketInfo> info )
 	{
-		var weapon = Instantiate( prefab, planetOwner.position, Quaternion.LookRotation( direction ), transform );
+		for ( int i = 0; i < info.Count; i++ )
+		{
+			var rocket = InitWeapon(info[i].WeaponInfoIndex, info[i].Position, Vector3.one, false);
+			rocket.transform.rotation = Quaternion.Euler( info[i].Rotation);
+			rocket.GetComponent<Rigidbody>( ).velocity = info[i].Velocity;
+		}
+	}
+
+	public WeaponInfo GetPrefabWeaponInfoByIndex ( int index )
+	{
+		return _rocketVariants[index].GetComponent<Rocket>( ).Info;
+	}
+
+	public Rocket InitWeapon ( int prefabIndex, Vector3 StartPosition, Vector3 direction, bool withAcceleration = true )
+	{
+		var prefab = _rocketVariants[prefabIndex];
+
+		var weapon = Instantiate( prefab, StartPosition, Quaternion.LookRotation( direction ), transform );
 		_weaponsRigs.Add( weapon.GetComponent<Rigidbody>( ) );
 
 		var weaponInfo = weapon.GetComponent<Rocket>();
+		weaponInfo.SetWeaponPrefabIndex( prefabIndex );
+
 		_rockets.Add( weaponInfo );
-		StartCoroutine( WaitForStartAccelerationFinished( weaponInfo.Info ) );
+
+		if ( withAcceleration )
+		{
+			StartCoroutine( WaitForStartAccelerationFinished( weaponInfo.Info ) );
+		}
+		return weaponInfo;
 	}
-	
-	public GameObject GetRandomWeapon ( )
+
+	public int GetRandomWeaponIndex ( )
 	{
 		var index = Random.Range(0, _rocketVariants.Count);
-		return _rocketVariants[index];
+		return index;
 	}
 
 	public void RemoveRocket ( Rocket rocket )
@@ -79,6 +95,18 @@ public class WeaponManager : MonoBehaviour
 				_weaponsRigs.Remove( rocketRig );
 			}
 		}
+	}
+
+	internal List<RocketInfo> GetRocketsInfo ( )
+	{
+		var result = new List<RocketInfo>();
+		for ( int i = 0; i < _rockets.Count; i++ )
+		{
+			var info = _rockets[i].GetInfo( );
+			result.Add( info );
+		}
+
+		return result;
 	}
 
 
