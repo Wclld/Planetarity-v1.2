@@ -62,6 +62,7 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 	{
 		_input = input;
 		_input.SubscribeWeapon( _weapon );
+		OnDeath += x => _input.UnsubscribeWeapon( _weapon );
 		
 		
 	}

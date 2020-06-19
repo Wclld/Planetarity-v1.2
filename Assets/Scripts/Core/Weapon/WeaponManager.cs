@@ -90,13 +90,8 @@ public class WeaponManager : MonoBehaviour
 
 		var position = rigidbody.transform.position;
 		var attractionVector = AttractorsManager.CalculateForceVectorForTarget(position, info.Weight);
-		//Debug.DrawRay( transform.position,)
 
 		var vectorsSum = baseAcceleration + attractionVector;
-
-		Debug.DrawRay( rigidbody.transform.position, vectorsSum.normalized, Color.red, 5 );
-
-
 
 		rigidbody.transform.LookAt( rigidbody.transform.position + vectorsSum );
 

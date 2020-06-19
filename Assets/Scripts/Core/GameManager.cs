@@ -38,7 +38,17 @@ internal sealed class GameManager : MonoBehaviour
 				newPlanet.SetInput( input );
 			}
 
+			newPlanet.OnDeath += RemovePlanet;
+
 			_planets.Add( newPlanet );
+		}
+	}
+
+	private void RemovePlanet ( Planet planet )
+	{
+		if ( _planets.Contains( planet ) )
+		{
+			_planets.Remove( planet );
 		}
 	}
 }

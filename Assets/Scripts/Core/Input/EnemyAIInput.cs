@@ -25,7 +25,16 @@ internal class EnemyAIInput : MonoBehaviour, IInput
 	}
 
 
-	public void SubscribeWeapon ( IWeapon weapon )
+	public void UnsubscribeWeapon ( IWeapon weapon )
+	{
+		OnFirePressed -= weapon.Fire;
+		OnPositionChanged -= weapon.SetDirection;
+
+		weapon.OnCooldownFinished -= Aim;
+		weapon.OnCooldownFinished -= Shoot;
+	}
+	public void SubscribeWeapon (
+ IWeapon weapon )
 	{
 		OnFirePressed += weapon.Fire;
 		OnPositionChanged += weapon.SetDirection;
@@ -39,12 +48,10 @@ internal class EnemyAIInput : MonoBehaviour, IInput
 	private void Aim ( )
 	{
 
-		//TODO: Add prediction
 		var closestPlanetPosition = GetClosestPlanet( );
 
 		var newAimDirection = CalculateRandomedPosition( closestPlanetPosition );
 		var newAimPosition = _planetOwner.position + newAimDirection;
-
 		OnPositionChanged?.Invoke( newAimPosition );
 	}
 
@@ -70,7 +77,6 @@ internal class EnemyAIInput : MonoBehaviour, IInput
 				closestDistance = currntDistance;
 			}
 		}
-
 		return closestPosition;
 	}
 
@@ -78,18 +84,19 @@ internal class EnemyAIInput : MonoBehaviour, IInput
 	{
 		var direction = targetPosition - _planetOwner.position;
 
-		var distance = direction.magnitude;
-
 		direction = direction.normalized;
-		var angle = Vector2.Angle( Vector2.right, direction );
 
-		var randomedAngle = Random.Range(-RANDOM_ANGLE_RANGE, RANDOM_ANGLE_RANGE);
+		var randomedAngle = Random.Range(-RANDOM_ANGLE_RANGE, RANDOM_ANGLE_RANGE) * Mathf.Deg2Rad;
 
-		var resultAngle = (angle + randomedAngle) * Mathf.Deg2Rad;
+		var cos = Mathf.Cos(randomedAngle);
+		var sin = Mathf.Sin(randomedAngle);
 
-		var resultDirection = new Vector2(Mathf.Sin(resultAngle), Mathf.Cos(resultAngle));
+		var newXDir = direction.x * cos - direction.y * sin;
+		var newYDir = direction.x * sin + direction.y * cos;
 
-		return resultDirection;
+		var newDirection = new Vector2(newXDir, newYDir);
+
+		return newDirection;
 	}
 
 	private List<Vector2> GetPlanetPositions ( )
@@ -106,4 +113,5 @@ internal class EnemyAIInput : MonoBehaviour, IInput
 
 		return planetPositions;
 	}
+
 }

@@ -50,4 +50,9 @@ internal class MouseInput : MonoBehaviour, IInput
 		OnFirePressed += weapon.Fire;
 		OnPositionChanged += weapon.SetDirection;
 	}
+	public void UnsubscribeWeapon ( IWeapon weapon )
+	{
+		OnFirePressed -= weapon.Fire;
+		OnPositionChanged -= weapon.SetDirection;
+	}
 }
