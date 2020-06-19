@@ -31,7 +31,7 @@ public class Rocket : MonoBehaviour
 		var damagable = other.GetComponentInParent<IDamagable>();
 		if ( damagable != null )
 		{
-			damagable.DealDamage( _info.Damage );
+			damagable.TakeDamage( _info.Damage );
 		}
 	}
 

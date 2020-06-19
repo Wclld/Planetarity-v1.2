@@ -1,4 +1,4 @@
 ﻿internal interface IDamagable
 {
-	void DealDamage ( int damage );
+	void TakeDamage ( int damage );
 }

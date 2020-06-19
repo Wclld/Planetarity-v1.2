@@ -112,7 +112,7 @@ MonoBehaviour:
     _startAccelerationDuration: 2
     _weight: 15
     _damage: 3
-    _cooldown: 0
+    _cooldown: 7.5
 --- !u!54 &6042677087219013719
 Rigidbody:
   m_ObjectHideFlags: 0

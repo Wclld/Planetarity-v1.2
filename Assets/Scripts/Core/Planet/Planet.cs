@@ -8,18 +8,16 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 	public event Action<int> OnHealthChange = default;
 
 	[SerializeField] int _maxHealth = 10;
-	[SerializeField] MovementInfo _movementInfo = default;
 	//TEMP!
 	[SerializeField] GameObject _rocketPrefab = default;
 
 	private IMovement _movement;
 	private IWeapon _weapon;
+	private IInput _input;
 
 	private int _currentHealth;
 
 	private Vector3 _nextFramePosition;
-	//TEMP!
-	[SerializeField] bool _canShoot = default;
 
 
 	private void Awake ( )
@@ -30,32 +28,20 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 			Debug.Log( $"hp left:{x}", gameObject );
 			Destroy( gameObject );
 		};
-		InitMovement( MovementType.Eliptical );
 		ChangeWeapon( new RocketLauncher( ) );
 	}
 
+
 	private void Start ( )
 	{
-		//TEMP!
 		_currentHealth = _maxHealth;
 		OnHealthChange += CheckDeath;
-		if ( _canShoot )
-		{
-			
-			InputManager.SubscribeToInput( _weapon.Fire, _weapon.SetDirection );
-		}
-		//tempEnd
-	}
-
-	private void OnValidate ( )
-	{
-		InitMovement( MovementType.Eliptical );
-		transform.position = _movement.UpdatePosition( Time.fixedDeltaTime );
 	}
 
 	private void Update ( )
 	{
 		transform.position = _nextFramePosition;
+		_weapon.UpdateCooldown( Time.deltaTime );
 	}
 
 	private void FixedUpdate ( )
@@ -63,14 +49,7 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 		_nextFramePosition = _movement.UpdatePosition( Time.fixedDeltaTime );
 	}
 
-	public void Init ( MovementInfo info )
-	{
-		//_currentHealth = _maxHealth;
-		//OnHealthChange += CheckDeath;
-		_movementInfo = info;
-	}
-
-	public void DealDamage ( int damage )
+	public void TakeDamage ( int damage )
 	{
 		if ( damage != 0 )
 		{
@@ -81,33 +60,27 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 	}
 
 
-	private void InitMovement ( MovementType type )
+	internal void SetInput ( IInput input )
 	{
-		switch ( type )
-		{
-			case MovementType.Circular:
-				throw new NotImplementedException( );
-				//break;
-			case MovementType.Eliptical:
-				_movement = new ElipticalMovement( );
-				_movement.Init( _movementInfo );
-				break;
-			default:
-				throw new NotImplementedException( );
-				//break;
-		}
+		_input = input;
+		_input.SubscribeWeapon( _weapon );
+		
+		
+	}
+
+
+	internal void InitMovement ( MovementInfo info )
+	{
+		_movement = new ElipticalMovement( );
+		_movement.Init( info );
 	}
 
 	private void ChangeWeapon ( IWeapon weapon )
 	{
-		//TEMP
-		if ( _canShoot )
-		{
-			_weapon = weapon;
-			_weapon.Init( transform );
-			//TEMP!
-			_weapon.SetPrefab( _rocketPrefab );
-		}
+		_weapon = weapon;
+		_weapon.Init( transform );
+		//TEMP!
+		_weapon.SetPrefab( _rocketPrefab );
 	}
 
 	private void CheckDeath ( int health )

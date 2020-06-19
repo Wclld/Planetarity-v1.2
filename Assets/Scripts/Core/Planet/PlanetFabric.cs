@@ -13,18 +13,24 @@ internal sealed class PlanetFabric : MonoBehaviour
 
 	internal Planet CreatePlanet ( )
 	{
+		MovementInfo newInfo = CalculateNewMovement( );
+		_lastInfo = newInfo;
+
+		var planet = Instantiate( _planetPrefab, transform ).GetComponent<Planet>( );
+		planet.InitMovement( newInfo );
+
+		return planet;
+	}
+
+	private MovementInfo CalculateNewMovement ( )
+	{
 		var newRadius = RandomRadius( );
 		var newCycleTime = CalculateCycle( newRadius );
 		var newProgress = Random.Range( 0f, 1f );
 
 		var newInfo = new MovementInfo(transform, newRadius, newCycleTime, newProgress);
-
-		var planet = Instantiate( _planetPrefab ).GetComponent<Planet>( );
-		planet.Init( newInfo );
-
-		return planet;
+		return newInfo;
 	}
-
 
 	private float CalculateCycle ( Vector2 newRadius )
 	{

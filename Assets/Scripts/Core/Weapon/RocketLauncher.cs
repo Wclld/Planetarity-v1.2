@@ -4,29 +4,34 @@ using UnityEngine;
 internal sealed class RocketLauncher : IWeapon
 {
 	public event Action OnCooldown = default;
+	public event Action OnCooldownFinished = default;
 
 	[SerializeField] GameObject _rocketPrefab;
 
 	private Transform _homePlanet = default;
 	private Vector3 _aimDirection = default;
-	private float _cooldown = 0;
+	private float _maxCooldown = 0;
+	private float _currentCooldown = 0;
+
+
+	public Transform Owner => _homePlanet;
 
 	public void Init ( Transform homePlanet, float remainingCooldown = 0 )
 	{
 		_homePlanet = homePlanet;
-
-		OnCooldown += CooldownAction;
-
 	}
 
 	public void SetPrefab ( GameObject prefab )
 	{
 		_rocketPrefab = prefab;
+
+		_maxCooldown = _rocketPrefab.GetComponent<Rocket>( ).Info.Cooldown;
+		_currentCooldown = _maxCooldown;
 	}
 
 	public void Fire ( )
 	{
-		if ( _cooldown > 0 )
+		if ( _currentCooldown > 0 )
 		{
 			OnCooldown?.Invoke( );
 		}
@@ -39,6 +44,8 @@ internal sealed class RocketLauncher : IWeapon
 	private void LaunchRocket ( )
 	{
 		WeaponManager.Instance.InitWeapon( _rocketPrefab, _homePlanet, _aimDirection );
+		_currentCooldown = _maxCooldown;
+
 	}
 
 	public void SetDirection ( Vector2 targetPosition )
@@ -46,9 +53,13 @@ internal sealed class RocketLauncher : IWeapon
 		_aimDirection = ( targetPosition - ( Vector2 )_homePlanet.position ).normalized;
 	}
 
-
-	private void CooldownAction ( )
+	public void UpdateCooldown ( float time )
 	{
-		throw new NotImplementedException( );
+		_currentCooldown -= time;
+		if ( _currentCooldown <= 0 )
+		{
+			OnCooldownFinished?.Invoke( );
+		}
+		_currentCooldown = Mathf.Clamp( _currentCooldown, 0, _maxCooldown );
 	}
 }
