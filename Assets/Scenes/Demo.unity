@@ -1340,7 +1340,7 @@ MonoBehaviour:
     - {fileID: 8062759597022417098, guid: fed0ae1db11688b4c93ccee9a1a6ef5a, type: 3}
     - {fileID: 5917683588091111878, guid: bd7323101d59f4946b9cfe4946683ad0, type: 3}
   _planetFabric: {fileID: 1967016473}
-  _enemyCount: 4
+  _maxEnemyCount: 4
   _saver: {fileID: 1188423213}
 --- !u!4 &1188423211
 Transform:
@@ -2163,7 +2163,7 @@ GameObject:
   - component: {fileID: 1967016472}
   - component: {fileID: 1967016473}
   m_Layer: 0
-  m_Name: Planetes
+  m_Name: Planets
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2196,7 +2196,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4259cbdae0fe66d459b01c92aea9103a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _planetPrefab: {fileID: 6931111421320620683, guid: 3c1f8392883647c4bb322b11d60dddb9,
-    type: 3}
+  _planetPrefabs:
+  - {fileID: 4392067724173720113, guid: 9c74ce5a97eb29e49b1befcc943eee8b, type: 3}
+  - {fileID: 4392067724173720113, guid: 9f88b6d9436815f4b93c95e50d95c63c, type: 3}
+  - {fileID: 4392067724173720113, guid: 021f22b07f9ff1c49b0238c8582f49ce, type: 3}
+  - {fileID: 4392067724173720113, guid: 589db8b6c7e66fa4c8efe618042b1dad, type: 3}
   _minRadiusChange: {x: 1.5, y: 1.5}
   _maxRadiusChange: {x: 4, y: 4}

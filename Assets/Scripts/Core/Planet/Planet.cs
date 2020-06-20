@@ -21,6 +21,7 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 
 	private int _currentHealth = 0;
 	private int _weaponIndex;
+	private int _prefabIndex;
 
 	private Vector3 _nextFramePosition;
 
@@ -77,6 +78,11 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 		_input.SubscribeWeapon( _weapon );
 	}
 
+	internal void SetPrefabInex ( int index )
+	{
+		_prefabIndex = index;
+	}
+
 	internal void InitMovement ( MovementInfo info )
 	{
 		_movement = new ElipticalMovement( );
@@ -103,8 +109,8 @@ internal sealed class Planet : MonoBehaviour, IDamagable
 			MovementInfo = _movementInfo,
 			WeaponIndex = _weaponIndex,
 			InputType = inputType,
-			MovementType = MovementType.Eliptical
-
+			MovementType = MovementType.Eliptical,
+			PrefabIndex = _prefabIndex
 		};
 		return info;
 	}

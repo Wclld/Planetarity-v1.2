@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 internal sealed class PlanetFabric : MonoBehaviour
 {
 	private const float CYCLE_MULTIPLIER = 5f;
 
-	[SerializeField] GameObject _planetPrefab = default;
+	[SerializeField] List<GameObject> _planetPrefabs = default;
 	[SerializeField] Vector2 _minRadiusChange = default;
 	[SerializeField] Vector2 _maxRadiusChange = default;
 
@@ -16,16 +17,20 @@ internal sealed class PlanetFabric : MonoBehaviour
 		MovementInfo newInfo = CalculateNewMovement( );
 		_lastInfo = newInfo;
 
-		var planet = Instantiate( _planetPrefab, transform ).GetComponent<Planet>( );
+		var randomIndex = Random.Range( 0, _planetPrefabs.Count );
+
+		var planet = Instantiate( _planetPrefabs[randomIndex], transform ).GetComponent<Planet>( );
 		planet.InitMovement( newInfo );
+		planet.SetPrefabInex( randomIndex );
 
 		return planet;
 	}
 
-	internal Planet CreatePlanet ( MovementInfo info )
+	internal Planet CreatePlanet ( MovementInfo info, int index )
 	{
-		var planet = Instantiate( _planetPrefab, transform ).GetComponent<Planet>( );
+		var planet = Instantiate( _planetPrefabs[index], transform ).GetComponent<Planet>( );
 		planet.InitMovement( info );
+		planet.SetPrefabInex( index );
 		return planet;
 	}
 

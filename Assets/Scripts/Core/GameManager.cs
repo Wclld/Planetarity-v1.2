@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+
+using Random = UnityEngine.Random;
 
 internal sealed class GameManager : MonoBehaviour
 {
@@ -13,7 +14,7 @@ internal sealed class GameManager : MonoBehaviour
 	[SerializeField] InputElements _inputElements = default;
 	[SerializeField] PlanetFabric _planetFabric = default;
 	[Range(1,4)]
-	[SerializeField] int _enemyCount = default;
+	[SerializeField] int _maxEnemyCount = default;
 	[SerializeField] Saver _saver = default;
 
 	private List<Planet> _planets = new List<Planet>( );
@@ -32,14 +33,17 @@ internal sealed class GameManager : MonoBehaviour
 	public void InitGame ( )
 	{
 		_playerLost = false;
-		var playerIndex = UnityEngine.Random.Range(0, _enemyCount - 1 );
-		CreatePlanets( _enemyCount + 1, playerIndex );
+		var randomedEnemyCount = Random.Range( 1, _maxEnemyCount );
+		var playerIndex = Random.Range( 0, randomedEnemyCount - 1 );
+		CreatePlanets( randomedEnemyCount + 1, playerIndex );
 	}
 
 	public void LoadFromSave ( )
 	{
 		if ( _saver != null )
 		{
+			_playerLost = false;
+
 			var saveInfo = _saver.Load( );
 			SetPlanetsFromSave( saveInfo.Planets );
 			WeaponManager.Instance.SetRocketsFromSave( saveInfo.Rockets );
@@ -65,7 +69,7 @@ internal sealed class GameManager : MonoBehaviour
 		{
 			var currentplanetInfo = planets[i];
 
-			var planet = _planetFabric.CreatePlanet( currentplanetInfo.MovementInfo );
+			var planet = _planetFabric.CreatePlanet( currentplanetInfo.MovementInfo, currentplanetInfo.PrefabIndex );
 
 			planet.ChangeWeapon( new RocketLauncher( ), currentplanetInfo.WeaponIndex );
 
@@ -85,7 +89,7 @@ internal sealed class GameManager : MonoBehaviour
 			_planets.Add( planet );
 		}
 	}
-	
+
 	private void CreatePlanets ( int count, int playerIndex )
 	{
 		_planets.Clear( );
@@ -119,7 +123,7 @@ internal sealed class GameManager : MonoBehaviour
 		_playerHUD.SubscribePlayer( loadedPlanet );
 		_playerPlanet = loadedPlanet;
 	}
-	
+
 	private void ClearPlanets ( )
 	{
 		while ( _planets.Count > 0 )

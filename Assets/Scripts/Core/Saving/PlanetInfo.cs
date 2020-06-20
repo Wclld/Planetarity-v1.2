@@ -8,4 +8,5 @@ public class PlanetInfo
 	public InputType InputType = default;
 	public int WeaponIndex = default;
 	public int HealthPoints = default;
+	public int PrefabIndex = default;
 }
